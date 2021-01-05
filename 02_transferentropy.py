@@ -70,30 +70,45 @@ nvals = len(xvals)
 nsites = X.shape[1]
 nr = X.shape[0]
 
+# Init array to hold TE given 1 month lag
 Tmat = np.zeros((nsites,nsites))
-maxlag = 4   # months
-monthgrid = np.arange(1,maxlag+1)
-#print(monthgrid)
-Tlagmat = np.zeros((nsites*(nsites-1),maxlag+2))
-Tlag_row = 0
 
-# init arrays to hold TE values per site pair, and the time lag it occurs
-TE = np.zeros((nsites, nsites, maxlag))
-TEmaxmat = np.zeros((nsites, nsites))
-TEmaxlag = np.zeros((nsites, nsites))
-
+# TE given lag of 1 month
 for s2 in range(0,nsites):
     for s1 in range(0,nsites):
         if s1 != s2:
             # Calculate the transfer entropy from s2 to s1
             Tmat[s2, s1] = calc_TE(X[:,s1],X[:,s2],nvals,1,pseucnt=.0)
             # Note: row - source site; col - sink site
-
-np.savetxt("bans_TE_lag1.csv", Tmat, delimiter=",")
-#Note: row - source site; col - sink site
+#np.savetxt("bans_TE_lag1.csv", Tmat, delimiter=",")
 
 
-# Figure: row - sink; col - source;
+# With variable lags
+maxlag = 4   # max lag in months
+monthgrid = np.arange(1,maxlag+1)
+#print(monthgrid)
+
+# init arrays
+TE = np.zeros((nsites, nsites, maxlag))     # TE values per site pair given lag
+print(TE.shape)
+
+# TE given lags of 1 to n months
+for tlag in range(1, maxlag + 1):
+    for s2 in range(0,nsites):          # iter over source
+        for s1 in range(0,nsites):      # iter over sink
+            if s1 != s2:
+                TE[s2, s1, tlag - 1] = calc_TE(X[:, s1], X[:, s2], nvals, tlag, 0.0)
+    filename = "bans_TE_given_lag_%i.csv" % tlag
+    np.savetxt(filename, np.array(TE[:,:,tlag-1]), delimiter=",")
+    # Note: row - source site; col - sink site
+# Find the max TE across time lags
+TEmax = np.amax(TE, axis=2)
+np.savetxt("bans_TE_max.csv", TEmax, delimiter=",")
+TEmaxlag = (TE.argmax(axis=2) + 1)
+np.savetxt("bans_TE_lag_of_max.csv", TEmaxlag, delimiter=",")
+
+
+# Plot TE: row - sink; col - source;
 fig, ax1 = plt.subplots()
 plot1 = ax1.imshow(Tmat.transpose(),'gray_r')
 ticks = range(0,11)
@@ -111,3 +126,19 @@ cbar.set_label('$TE_{X \u2192 Y}$ | $\u03C4 = 1$ month (bits)', rotation=90)
 plt.show()
 #fig.savefig("fig_TE_lag_1_transpose.pdf", bbox_inches='tight')
 
+
+# Plot TE max: row - sink; col - source;
+fig, ax2 = plt.subplots()
+plot1 = ax2.imshow(TEmax.transpose(),'gray_r')
+ticks = range(0,11)
+print(ticks)
+ticklabels = ['Calbayog: 0','Cambatutay: 1','Irong-Irong: 2','Maqueda: 3','Villareal: 4','Daram Island: 5','Biliran: 6',
+              'Carigara: 7','Coastal Leyte: 8','Calubian: 9','San Pedro Bay: 10']
+ax2.set_xticks(ticks)
+#ax2.set_xticklabels(ticklabels, rotation=90)
+ax2.set_yticks(ticks)
+ax2.set_yticklabels(ticklabels)
+cbar = plt.colorbar(plot1)
+cbar.set_label('max $TE_{X \u2192 Y}$ (bits)', rotation=90)
+#plt.tight_layout()
+plt.show()

@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f8382a8-ad8a-4feb-a0f8-199f1e001b6a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/02_transferentropy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_transferentropy.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_transferentropy.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,8 +39,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/02_transferentropy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="113" selection-start-line="113" selection-end-line="113" />
+            <state relative-caret-position="220">
+              <caret line="143" column="10" lean-forward="true" selection-start-line="143" selection-start-column="10" selection-end-line="143" selection-end-column="10" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -72,10 +71,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="308" />
-    <option name="y" value="124" />
-    <option name="width" value="945" />
-    <option name="height" value="526" />
+    <option name="x" value="302" />
+    <option name="y" value="121" />
+    <option name="width" value="932" />
+    <option name="height" value="583" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -219,11 +218,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="308" y="124" width="945" height="526" extended-state="0" />
+    <frame x="302" y="121" width="932" height="583" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24916944" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.252809" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -231,7 +230,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32949308" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.29124236" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -276,8 +275,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/02_transferentropy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="113" selection-start-line="113" selection-end-line="113" />
+        <state relative-caret-position="220">
+          <caret line="143" column="10" lean-forward="true" selection-start-line="143" selection-start-column="10" selection-end-line="143" selection-end-column="10" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
