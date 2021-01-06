@@ -3,9 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn
 seaborn.set_style('whitegrid')
+import os
 
+if not os.path.exists('output'):
+    os.makedirs('output')
 
-df = pd.read_csv("bans_all.csv")       # v1 - irregular grid, updated to sep 2019
+df = pd.read_csv("input/bans_all.csv")       # v1 - irregular grid, updated to sep 2019
 years = df.year.values
 
 X = df.drop(['reference','datestring','year','month','datenumber'], axis='columns').values
@@ -23,15 +26,16 @@ print('model summary', model.copy())
 
 '''
 # Save model so we can load at a later time
-with open("bansmodel.json", "w") as outfile: outfile.write(model.to_json())
+with open("output/bans_bnnet.json", "w") as outfile: outfile.write(model.to_json())
 #read back model
-#BayesianNetwork.from_json("bansmodel.json")
+savedModel = BayesianNetwork.from_json("output/bans_bnnet.json")
 '''
 
 print(model.structure)
-plt.figure(figsize=(7, 7))
+fig = plt.figure(figsize=(7, 7))
 model.plot()
 plt.show()
+fig.savefig("output/fig_BN.pdf", bbox_inches='tight')
 
 # Example inference: Predict based on observed nodes
 # 0 - clear; 1 - ban start; 2 - ban continuation

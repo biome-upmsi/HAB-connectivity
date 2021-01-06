@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f8382a8-ad8a-4feb-a0f8-199f1e001b6a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/00_learnBNstructure.py" beforeDir="false" afterPath="$PROJECT_DIR$/00_learnBNstructure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/01_mutualinfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/01_mutualinfo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/02_transferentropy.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_transferentropy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bans_all.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bans_monthly.csv" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/00_learnBNstructure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="15" lean-forward="true" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
+            <state relative-caret-position="51">
+              <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
               <folding>
                 <element signature="e#1#40#0" expanded="true" />
               </folding>
@@ -27,10 +31,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/01_mutualinfo.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="94" column="20" lean-forward="true" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="20" />
+            <state relative-caret-position="212">
+              <caret line="104" column="54" lean-forward="true" selection-start-line="104" selection-start-column="54" selection-end-line="104" selection-end-column="54" />
               <folding>
-                <element signature="e#3#21#0" expanded="true" />
+                <element signature="e#133#151#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -39,8 +43,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/02_transferentropy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="143" column="10" lean-forward="true" selection-start-line="143" selection-start-column="10" selection-end-line="143" selection-end-column="10" />
+            <state relative-caret-position="211">
+              <caret line="161" column="68" lean-forward="true" selection-start-line="161" selection-start-column="68" selection-end-line="161" selection-end-column="68" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -63,16 +67,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/00_learnBNstructure.py" />
         <option value="$PROJECT_DIR$/01_calcAMI.py" />
         <option value="$PROJECT_DIR$/01_mutualinfo.py" />
         <option value="$PROJECT_DIR$/02_transferentropy.py" />
+        <option value="$PROJECT_DIR$/00_learnBNstructure.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="302" />
-    <option name="y" value="121" />
+    <option name="x" value="310" />
+    <option name="y" value="58" />
     <option name="width" value="932" />
     <option name="height" value="583" />
   </component>
@@ -110,7 +114,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.02_transferentropy">
+  <component name="RunManager" selected="Python.00_learnBNstructure">
     <configuration name="00_learnBNstructure" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="HAB-samarleyte" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -197,10 +201,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.00_learnBNstructure" />
         <item itemvalue="Python.02_transferentropy" />
         <item itemvalue="Python.01_mutualinfo" />
         <item itemvalue="Python.01_calcAMI" />
-        <item itemvalue="Python.00_learnBNstructure" />
       </list>
     </recent_temporary>
   </component>
@@ -218,7 +222,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="302" y="121" width="932" height="583" extended-state="0" />
+    <frame x="310" y="58" width="932" height="583" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
@@ -255,8 +259,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/00_learnBNstructure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="15" lean-forward="true" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
+        <state relative-caret-position="51">
+          <caret line="29" column="16" lean-forward="true" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
           <folding>
             <element signature="e#1#40#0" expanded="true" />
           </folding>
@@ -265,18 +269,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/01_mutualinfo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="94" column="20" lean-forward="true" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="20" />
+        <state relative-caret-position="212">
+          <caret line="104" column="54" lean-forward="true" selection-start-line="104" selection-start-column="54" selection-end-line="104" selection-end-column="54" />
           <folding>
-            <element signature="e#3#21#0" expanded="true" />
+            <element signature="e#133#151#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/02_transferentropy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="143" column="10" lean-forward="true" selection-start-line="143" selection-start-column="10" selection-end-line="143" selection-end-column="10" />
+        <state relative-caret-position="211">
+          <caret line="161" column="68" lean-forward="true" selection-start-line="161" selection-start-column="68" selection-end-line="161" selection-end-column="68" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

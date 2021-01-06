@@ -2,6 +2,10 @@ import numpy as np
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
+if not os.path.exists('output'):
+    os.makedirs('output')
 
 def calc_TE(X1,X2,nvals,lag=1, pseucnt = 0.0):
     # Calculates the transfer entropy from X2 to X1
@@ -60,7 +64,7 @@ print(calc_TE(X2,X1,2,lag=1))
 # 0.0375 or 0.1461 if base 2
 '''
 
-df = pd.read_csv("bans_monthly.csv")    # v2 - regular grid, some loss of resolution
+df = pd.read_csv("input/bans_monthly.csv")    # v2 - regular grid, some loss of resolution
 X = df.drop(['reference','datestring','year','month','datenumber'], axis='columns').values
 
 
@@ -80,7 +84,7 @@ for s2 in range(0,nsites):
             # Calculate the transfer entropy from s2 to s1
             Tmat[s2, s1] = calc_TE(X[:,s1],X[:,s2],nvals,1,pseucnt=.0)
             # Note: row - source site; col - sink site
-#np.savetxt("bans_TE_lag1.csv", Tmat, delimiter=",")
+#np.savetxt("output/bans_TE_lag1.csv", Tmat, delimiter=",")
 
 
 # With variable lags
@@ -89,8 +93,8 @@ monthgrid = np.arange(1,maxlag+1)
 #print(monthgrid)
 
 # init arrays
-TE = np.zeros((nsites, nsites, maxlag))     # TE values per site pair given lag
-print(TE.shape)
+TE = np.empty((nsites, nsites, maxlag))     # TE values per site pair given lag
+TE[:] = np.NaN
 
 # TE given lags of 1 to n months
 for tlag in range(1, maxlag + 1):
@@ -98,21 +102,20 @@ for tlag in range(1, maxlag + 1):
         for s1 in range(0,nsites):      # iter over sink
             if s1 != s2:
                 TE[s2, s1, tlag - 1] = calc_TE(X[:, s1], X[:, s2], nvals, tlag, 0.0)
-    filename = "bans_TE_given_lag_%i.csv" % tlag
+    filename = "output/bans_TE_given_lag_%i.csv" % tlag
     np.savetxt(filename, np.array(TE[:,:,tlag-1]), delimiter=",")
     # Note: row - source site; col - sink site
 # Find the max TE across time lags
 TEmax = np.amax(TE, axis=2)
-np.savetxt("bans_TE_max.csv", TEmax, delimiter=",")
+np.savetxt("output/bans_TE_max.csv", TEmax, delimiter=",")
 TEmaxlag = (TE.argmax(axis=2) + 1)
-np.savetxt("bans_TE_lag_of_max.csv", TEmaxlag, delimiter=",")
+np.savetxt("output/bans_TE_lag_of_max.csv", TEmaxlag, delimiter=",")
 
 
 # Plot TE: row - sink; col - source;
 fig, ax1 = plt.subplots()
 plot1 = ax1.imshow(Tmat.transpose(),'gray_r')
 ticks = range(0,11)
-print(ticks)
 ticklabels = ['Calbayog: 0','Cambatutay: 1','Irong-Irong: 2','Maqueda: 3','Villareal: 4','Daram Island: 5','Biliran: 6',
               'Carigara: 7','Coastal Leyte: 8','Calubian: 9','San Pedro Bay: 10']
 ax1.set_xticks(ticks)
@@ -124,21 +127,36 @@ cbar = plt.colorbar(plot1)
 cbar.set_label('$TE_{X \u2192 Y}$ | $\u03C4 = 1$ month (bits)', rotation=90)
 #plt.tight_layout()
 plt.show()
-#fig.savefig("fig_TE_lag_1_transpose.pdf", bbox_inches='tight')
+fig.savefig("output/fig_TE_lag_1_transpose.pdf", bbox_inches='tight')
 
 
 # Plot TE max: row - sink; col - source;
-fig, ax2 = plt.subplots()
-plot1 = ax2.imshow(TEmax.transpose(),'gray_r')
+# and include time lags for the 95th percentile values of all TEs
+# set percentile value
+cutval = np.percentile(TE[np.logical_not(np.isnan(TE))], 95)
+#print('cutoff value: ', cutval)
+
+TEmaxtrans = TEmax.transpose()          # x - source; y - destination
+TEmaxlagtrans = TEmaxlag.transpose()
+fig2, ax2 = plt.subplots()
+plot2 = ax2.imshow(TEmaxtrans,'gray_r')
 ticks = range(0,11)
-print(ticks)
+# add the lags as text, but only for the high values
+for i in range(len(ticklabels)):
+    for j in range(len(ticklabels)):
+        if TEmaxtrans[i,j] > cutval:
+            text = ax2.text(j, i, int(TEmaxlagtrans[i,j]),
+                       ha="center", va="center", color="w")
+
+
 ticklabels = ['Calbayog: 0','Cambatutay: 1','Irong-Irong: 2','Maqueda: 3','Villareal: 4','Daram Island: 5','Biliran: 6',
               'Carigara: 7','Coastal Leyte: 8','Calubian: 9','San Pedro Bay: 10']
 ax2.set_xticks(ticks)
 #ax2.set_xticklabels(ticklabels, rotation=90)
 ax2.set_yticks(ticks)
 ax2.set_yticklabels(ticklabels)
-cbar = plt.colorbar(plot1)
-cbar.set_label('max $TE_{X \u2192 Y}$ (bits)', rotation=90)
+cbar2 = plt.colorbar(plot2)
+cbar2.set_label('max $TE_{X \u2192 Y}$ (bits)', rotation=90)
 #plt.tight_layout()
 plt.show()
+fig2.savefig("output/fig_TE_max_transpose.pdf", bbox_inches='tight')

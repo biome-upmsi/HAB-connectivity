@@ -6,6 +6,10 @@ import math
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics.cluster import adjusted_mutual_info_score
+import os
+
+if not os.path.exists('output'):
+    os.makedirs('output')
 
 
 # Alternative option: Mutual information
@@ -50,7 +54,7 @@ print(mi_12)
 #mi_12 = 0.00199 if log2(); 0.000599 if log10()
 '''
 
-df = pd.read_csv("bans_all.csv")       # v1 - irregular grid, updated to sep 2019
+df = pd.read_csv("input/bans_all.csv")       # v1 - irregular grid, updated to sep 2019
 years = df.year.values
 
 X = df.drop(['reference','datestring','year','month','datenumber'], axis='columns').values
@@ -78,7 +82,7 @@ for s2 in range(0,nsites):
             AMImat[s2, s1] = adjusted_mutual_info_score(X[:, s1], X[:, s2])
 
 # Save matrix
-np.savetxt("bans_AMI.csv", AMImat, delimiter=",")
+np.savetxt("output/bans_AMI.csv", AMImat, delimiter=",")
 
 var2plot = AMImat               # or MImat
 varval = '$AMI(X,Y)$ (bits)'    # or '$MI(X,Y)$ (bits)'
@@ -98,4 +102,4 @@ cbar = plt.colorbar(plot2)
 cbar.set_label(varval, rotation=90)
 plt.tight_layout()
 plt.show()
-#fig.savefig("fig_AMI.pdf", bbox_inches='tight')
+fig.savefig("output/fig_AMI.pdf", bbox_inches='tight')
