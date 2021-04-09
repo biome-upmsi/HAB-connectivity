@@ -77,9 +77,11 @@ AMImat = np.zeros((nsites,nsites))
 
 for s2 in range(0,nsites):
     for s1 in range(0,nsites):
-        if s1 != s2:
-            MImat[s2, s1] = calc_MI(X[:, s1], X[:, s2], nvals)
-            AMImat[s2, s1] = adjusted_mutual_info_score(X[:, s1], X[:, s2])
+        MImat[s2, s1] = calc_MI(X[:, s1], X[:, s2], nvals)
+        AMImat[s2, s1] = adjusted_mutual_info_score(X[:, s1], X[:, s2])
+        #if s1 != s2:
+        #    MImat[s2, s1] = calc_MI(X[:, s1], X[:, s2], nvals)
+        #    AMImat[s2, s1] = adjusted_mutual_info_score(X[:, s1], X[:, s2])
 
 # Save matrix
 np.savetxt("output/bans_AMI.csv", AMImat, delimiter=",")
@@ -100,6 +102,6 @@ ax.set_yticks(ticks)
 ax.set_yticklabels(ticklabels)
 cbar = plt.colorbar(plot2)
 cbar.set_label(varval, rotation=90)
-plt.tight_layout()
+#plt.tight_layout()
 plt.show()
 fig.savefig("output/fig_AMI.pdf", bbox_inches='tight')
