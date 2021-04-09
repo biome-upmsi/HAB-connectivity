@@ -8,6 +8,8 @@ import os
 if not os.path.exists('output'):
     os.makedirs('output')
 
+
+############ Build raining data
 df = pd.read_csv("input/bans_all.csv")       # v1 - irregular grid, updated to sep 2019
 years = df.year.values
 
@@ -20,9 +22,12 @@ yearsub = years>=1991
 X = X[yearsub, :]
 #print(X.shape)
 
-smoother = 1.0      # final version uses 1.0
+
+############ Learn Bayesian network structure
+smoother = 1      # final version uses 1.0
 model = BayesianNetwork.from_samples(X, algorithm='exact-dp', pseudocount=smoother)
 print('model summary', model.copy())
+
 
 '''
 # Save model so we can load at a later time
@@ -37,7 +42,23 @@ model.plot()
 plt.show()
 fig.savefig("output/fig_BN.pdf", bbox_inches='tight')
 
-# Example inference: Predict based on observed nodes
+
+############ Performance on training and validation data
+validdf = pd.read_csv("input/bans_validation.csv")       # v1 - irregular grid, updated to sep 2019
+X2 = validdf.drop(['reference','datestring','year','month'], axis='columns').values
+print(X2)
+
+# LogP(data|model)
+#want to maximize the log probability
+#or minimize the negative log probability
+
+print('log P(training data| model')
+print(sum(model.log_probability(X)))
+print('log P(validation data| model')
+print(sum(model.log_probability(X2)))
+
+
+############ Example inference: Predict based on observed nodes
 # 0 - clear; 1 - ban start; 2 - ban continuation
 calbayog = None     # X_0
 cambatutay = 2      # X_1
@@ -59,3 +80,6 @@ modpred = model.predict([[calbayog, cambatutay, irong, maqueda, villareal, daram
 print('Prediction:')
 for i in range(0, len(sitenames)):
     print(sitenames[i], ': ', modpred[0][i])
+
+
+
