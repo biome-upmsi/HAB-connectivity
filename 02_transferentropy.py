@@ -115,9 +115,16 @@ np.savetxt("output/bans_TE_lag_of_max.csv", TEmaxlag, delimiter=",")
 # Plot TE: row - sink; col - source;
 fig, ax1 = plt.subplots()
 plot1 = ax1.imshow(Tmat.transpose(),'gray_r')
+
 ticks = range(0,11)
 ticklabels = ['Calbayog: 0','Cambatutay: 1','Irong-Irong: 2','Maqueda: 3','Villareal: 4','Daram Island: 5','Biliran: 6',
               'Carigara: 7','Coastal Leyte: 8','Calubian: 9','San Pedro Bay: 10']
+
+for i in range(len(ticklabels)):
+    for j in range(len(ticklabels)):
+        if i == j:
+            text = ax1.text(j, i, "-",
+                        ha="center", va="center", color="k")
 ax1.set_xticks(ticks)
 #ax1.set_xticklabels(ticklabels, rotation=90)
 ax1.set_yticks(ticks)
@@ -140,17 +147,19 @@ TEmaxtrans = TEmax.transpose()          # x - source; y - destination
 TEmaxlagtrans = TEmaxlag.transpose()
 fig2, ax2 = plt.subplots()
 plot2 = ax2.imshow(TEmaxtrans,'gray_r')
-ticks = range(0,11)
+
 # add the lags as text, but only for the high values
 for i in range(len(ticklabels)):
     for j in range(len(ticklabels)):
         if TEmaxtrans[i,j] > cutval:
             text = ax2.text(j, i, int(TEmaxlagtrans[i,j]),
                        ha="center", va="center", color="w")
+        if i == j:
+            text = ax2.text(j, i, "-",
+                        ha="center", va="center", color="k")
 
 
-ticklabels = ['Calbayog: 0','Cambatutay: 1','Irong-Irong: 2','Maqueda: 3','Villareal: 4','Daram Island: 5','Biliran: 6',
-              'Carigara: 7','Coastal Leyte: 8','Calubian: 9','San Pedro Bay: 10']
+
 ax2.set_xticks(ticks)
 #ax2.set_xticklabels(ticklabels, rotation=90)
 ax2.set_yticks(ticks)
