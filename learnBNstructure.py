@@ -9,7 +9,7 @@ if not os.path.exists('output'):
     os.makedirs('output')
 
 
-############ Build raining data
+############ Build training data
 df = pd.read_csv("input/bans_all.csv")       # v1 - irregular grid, updated to sep 2019
 years = df.year.values
 
