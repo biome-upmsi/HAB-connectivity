@@ -5,12 +5,19 @@ import numpy as np
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy import stats
 from sklearn.metrics.cluster import adjusted_mutual_info_score, mutual_info_score
 import os
 from randomdatasets import *
 
+
 # Alternative option: Mutual information
 def mutual_info(x1, x2):
+    '''
+
+    :param x1, x2: array, time series for site
+    :return mutualinfo: mutual information of 2 sites
+    '''
     # note that if x1=x2, MI(X,X) will be equal to entropy of (X)
     nvals = 3
     print("x1 = ", x1)
@@ -63,31 +70,6 @@ def getPairwiseValues(func, X):
             M[j, i] = m   # since symmetric measure
     return M
 
-def plotPairwiseMutualInfo(X, cbar_text, filename=None):
-    '''
-
-    :param X: matrix of pairwise values
-    :param cbar_text: string, 'variable (units)' of M
-    :return: none
-    '''
-    #var2plot = randAMI[0, :, :]  # AMI
-    #varval = '$AMI(X,Y)$ (bits)'  # or '$MI(X,Y)$ (bits)'
-
-    fig, ax = plt.subplots()
-    plot2 = ax.imshow(X, 'gray_r')
-    ticks = range(0, 11)
-    #print(ticks)
-    ticklabels = ['Calbayog: 0', 'Cambatutay: 1', 'Irong-Irong: 2', 'Maqueda: 3', 'Villareal: 4', 'Daram Island: 5',
-                  'Biliran: 6',
-                  'Carigara: 7', 'Coastal Leyte: 8', 'Calubian: 9', 'San Pedro Bay: 10']
-    ax.set_xticks(ticks)
-    ax.set_yticks(ticks)
-    ax.set_yticklabels(ticklabels)
-    cbar = plt.colorbar(plot2)
-    cbar.set_label(cbar_text, rotation=90)
-    plt.show()
-    if(filename):
-        fig.savefig(filename, bbox_inches='tight')
 
 def getPairwiseRandStat(M3, func):
     '''
@@ -105,6 +87,45 @@ def getPairwiseRandStat(M3, func):
             #print(M3[:, si, sj])
             S[si, sj] = func(M3[:, si, sj])
     return S
+
+
+def plotPairwiseMutualInfo(X, cbar_text, filename=None, p = False, Xrand=0):
+    '''
+
+    :param X: matrix of pairwise values
+    :param cbar_text: string, 'variable (units)' of M
+    :param filename: to save plot
+    :param p: bool, include percentile score in plot
+    :param Xrand: a 3D array of random values of MI to use for percentile scoring
+    :return: none
+    '''
+    #var2plot = randAMI[0, :, :]  # AMI
+    #varval = '$AMI(X,Y)$ (bits)'  # or '$MI(X,Y)$ (bits)'
+
+    fig, ax = plt.subplots()
+    plot2 = ax.imshow(X, 'gray_r')
+    ticks = range(0, 11)
+    ticklabels = ['Calbayog: 0', 'Cambatutay: 1', 'Irong-Irong: 2', 'Maqueda: 3', 'Villareal: 4', 'Daram Island: 5',
+                  'Biliran: 6',
+                  'Carigara: 7', 'Coastal Leyte: 8', 'Calubian: 9', 'San Pedro Bay: 10']
+    # Include percentile score based on random AMI values
+    if p:
+        for i in range(len(ticklabels)):
+            for j in range(len(ticklabels)):
+                if (i != j):
+                    percentile = stats.percentileofscore(Xrand[:, i, j], X[i, j], 'weak')
+                    if percentile > 95:
+                        ax.text(j, i, round(percentile, 1), ha="center", va="center", color="royalblue", fontsize='x-small')
+    ax.set_xticks(ticks)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(ticklabels)
+    cbar = plt.colorbar(plot2)
+    cbar.set_label(cbar_text, rotation=90)
+    plt.show()
+    if filename:
+        fig.savefig(filename, bbox_inches='tight')
+
+
 
 
 ############ Output folder
@@ -125,7 +146,7 @@ nt, nsites = X.shape
 
 ############ Build random datasets
 # Generate random datasets using Markov chains
-nreps = 2
+nreps = 1000
 randomDatasets = buildRandomDatasets(X, nreps)
 print(randomDatasets[1, :, :])
 
@@ -136,7 +157,7 @@ print(randomDatasets[1, :, :])
 AMI = getPairwiseValues(adjusted_mutual_info_score, X)
 # Save values
 np.savetxt("output/bans_AMI.csv", AMI, delimiter=",")
-plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI.pdf")
+#plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI.pdf")
 
 # random datasets
 randAMI = np.empty((nreps, nsites, nsites))
@@ -153,8 +174,12 @@ for r in range(0, nreps):
     #                                                      randomDatasets[r, :, j])
 #print(randAMI[0, :, :])
 randAMImean = getPairwiseRandStat(randAMI, np.mean)
-plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
+#plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
+plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
 
+
+
+'''
 
 ############ Calculate probability of AMI[i,j] given the distribution of randAMI[:,i,j]
 for i in range(0, nsites):
@@ -165,7 +190,7 @@ for i in range(0, nsites):
 
 
 
-'''
+
 # TEST if implementation correct
 X2 = [1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1]
 X1 = [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1]
