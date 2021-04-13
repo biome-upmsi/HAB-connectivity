@@ -172,7 +172,7 @@ for r in range(0, nreps):
 #print(randAMI[0, :, :])
 randAMImean = getPairwiseRandStat(randAMI, np.mean)
 plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
-#plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
+plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
 
 
 
