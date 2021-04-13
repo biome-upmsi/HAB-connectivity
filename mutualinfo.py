@@ -162,20 +162,17 @@ np.savetxt("output/bans_AMI.csv", AMI, delimiter=",")
 # random datasets
 randAMI = np.empty((nreps, nsites, nsites))
 randAMI[:] = np.nan
-randMI = np.empty((nreps, nsites, nsites))
-randMI[:] = np.nan
+#randMI = np.empty((nreps, nsites, nsites))
+#randMI[:] = np.nan
 
 for r in range(0, nreps):
     randAMI[r, :, :] = getPairwiseValues(adjusted_mutual_info_score, randomDatasets[r, :, :])
     #randMI[r, :, :] = getPairwiseValues(mutual_info, randomDatasets[r, :, :])
-    #for i in range(0, nsites):
-    #    for j in range(i, nsites):
-    #        randAMI[r, i, j] = adjusted_mutual_info_score(randomDatasets[r, :, i],
-    #                                                      randomDatasets[r, :, j])
+
 #print(randAMI[0, :, :])
 randAMImean = getPairwiseRandStat(randAMI, np.mean)
-#plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
-plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
+plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
+#plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
 
 
 
