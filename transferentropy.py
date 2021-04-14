@@ -66,6 +66,14 @@ def calc_TE(X1,X2,lag=1, pseucnt = 0.0):
     #print(T_X2toX1)
     return(T_X2toX1)
 
+def buildNanArray(ni, nj, nk = None):
+    if nk:
+        arr = np.empty((nk, ni, nj))
+    else:
+        arr = np.empty((ni, nj))
+    arr[:] = np.nan
+    return arr
+
 def getPairwiseTransferEntropy(X, lag, pseucnt=0, filename=None):
     '''
     Calculate transfer entropy for each site pair in the dataset
@@ -76,8 +84,8 @@ def getPairwiseTransferEntropy(X, lag, pseucnt=0, filename=None):
     :return Tmat: a matrix of pairwise TE values
     '''
     nt, nsites = X.shape
-    Tmat = np.empty((nsites, nsites))
-    Tmat[:] = np.nan
+    Tmat = buildNanArray(nsites, nsites)
+
     for s2 in range(0, nsites):
         for s1 in range(0, nsites):
             if s1 != s2:
@@ -130,18 +138,16 @@ def getPairwiseStat(M3, func):
     '''
     :param M3: 3-dimensional array, k x sink site x source site
     :param func: statistic to calculate over M3[:, i, j]
-    :return S: 2-dimensional array (nsites x nsites) of statistic
+    :return arrS: 2-dimensional array (nsites x nsites) of statistic
     '''
     nr, ni, nj = M3.shape
-    S = np.empty((ni, ni))
-    S[:] = np.nan
+    arrS = buildNanArray(ni, ni)
 
     for si in range(0, ni):
         for sj in range(0, nj):
             #print(M3[:, si, sj])
-            S[si, sj] = func(M3[:, si, sj])
-    return S
-
+            arrS[si, sj] = func(M3[:, si, sj])
+    return arrS
 
 
 ############ Output folder
@@ -154,12 +160,11 @@ df = pd.read_csv("input/bans_monthly.csv")    # v2 - regular grid, some loss of 
 X = df.drop(['reference','datestring','year','month','datenumber'], axis='columns').values
 nt, nsites = X.shape
 
-
-
 # TE given variable lag months
 maxlag = 4
-TE_varlags = np.empty((maxlag, nsites, nsites))
+TE_varlags = buildNanArray(nsites, nsites, maxlag)  # 3D array, pairwise TE at different lags
 pseudocount = 0.0
+
 for i in range(1, maxlag+1):
     print(i)
     tlag = i
@@ -174,7 +179,7 @@ for i in range(1, maxlag+1):
     plotPairwiseTransferEntropy(Tmat, colorbartitle, outputfigname, False)
 
 
-maxTE = getPairwiseStat(TE_varlags, np.amax)
+maxTE = getPairwiseStat(TE_varlags, np.amax)        # max TE across 4 time lags
 plotPairwiseTransferEntropy(maxTE, 'max $TE_{X \u2192 Y}$ (bits)',
                             "output/fig_TE_max.pdf", False)
 np.savetxt("output/bans_TE_max.csv", maxTE, delimiter=",")
@@ -186,22 +191,37 @@ np.savetxt("output/bans_TE_max.csv", maxTE, delimiter=",")
 nreps = 1000
 randomDatasets = buildRandomDatasets(X, nreps)
 
-randTE = np.empty((nreps, nsites, nsites))
-randTE[:] = np.nan
-randlag = 1
-
+randTE = buildNanArray(nsites, nsites, nreps)       # TE values for each replicate dataset
+randTEmax = buildNanArray(nsites, nsites, nreps)    # max TE values for each replicate dataset
 for r in range(0, nreps):
-    randTE[r, :, :] = getPairwiseTransferEntropy(randomDatasets[r, :, :], randlag, pseudocount, None)
+    replicate_TE_4lags = buildNanArray(nsites, nsites, maxlag)
+    for i in range(1, maxlag+1):
+        TE = getPairwiseTransferEntropy(randomDatasets[r, :, :], i, pseudocount, None)
+        replicate_TE_4lags[i - 1, :, :] = TE
+        if i == 1:
+            randTE[r, :, :] = TE
+    randTEmax[r, :, :] = getPairwiseStat(replicate_TE_4lags, np.amax)
 
-
+# mean TE given lag = 1 month across replicate datasets
 randTEmean = getPairwiseStat(randTE, np.mean)
-plotPairwiseTransferEntropy(randTEmean, 'mean $TE_{X \u2192 Y}$ | $\u03C4 = 1$ month (bits) over random time series',
+# plot mean TE given lag = 1 month across replicate datasets
+plotPairwiseTransferEntropy(randTEmean,
+                            'mean $TE_{X \u2192 Y}$ | $\u03C4 = 1$ month (bits) over random time series',
                             "output/fig_TErand_lag_1_mean.pdf", False)
 # plot TE given 1 month lag from original data, with percentile score based on randTE
 plotPairwiseTransferEntropy(TE_varlags[0, :, :],
                             '$TE_{X \u2192 Y}$ | $\u03C4 = 1$ month (bits)',
                             "output/fig_TE_lag_1_withpercentile.pdf",
                             True, randTE)
+
+randTEmax_mean = getPairwiseStat(randTEmax, np.mean)
+plotPairwiseTransferEntropy(randTEmax_mean,
+                            'max $TE_{X \u2192 Y}$ (bits) averaged over random time series',
+                            "output/fig_TErand_max_mean.pdf", False)
+
+# plot max TE across 4 time lags from original data, with percentile score based on randTEmax
+plotPairwiseTransferEntropy(maxTE, 'max $TE_{X \u2192 Y}$ (bits)',
+                            "output/fig_TE_max_withpercentile.pdf", True, randTEmax)
 
 
 
