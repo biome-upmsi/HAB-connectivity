@@ -157,7 +157,7 @@ print(randomDatasets[1, :, :])
 AMI = getPairwiseValues(adjusted_mutual_info_score, X)
 # Save values
 np.savetxt("output/bans_AMI.csv", AMI, delimiter=",")
-#plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI.pdf")
+plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$', "output/fig_AMI.pdf")
 
 # random datasets
 randAMI = np.empty((nreps, nsites, nsites))
@@ -171,8 +171,8 @@ for r in range(0, nreps):
 
 #print(randAMI[0, :, :])
 randAMImean = getPairwiseRandStat(randAMI, np.mean)
-plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$ (bits)', "output/fig_randAMImean.pdf")
-plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$ (bits)', "output/fig_AMI_withpercentile.pdf", True, randAMI)
+plotPairwiseMutualInfo(randAMImean, '$AMI(X,Y)$', "output/fig_randAMImean.pdf")
+plotPairwiseMutualInfo(AMI, '$AMI(X,Y)$', "output/fig_AMI_withpercentile.pdf", True, randAMI)
 
 
 
