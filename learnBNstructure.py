@@ -45,8 +45,8 @@ fig.savefig("output/fig_BN.pdf", bbox_inches='tight')
 
 ############ Performance on training and validation data
 validdf = pd.read_csv("input/bans_validation.csv")       # v1 - irregular grid, updated to sep 2019
-X2 = validdf.drop(['reference','datestring','year','month'], axis='columns').values
-print(X2)
+X2 = validdf.drop(['reference', 'datestring', 'year', 'month'], axis='columns').values
+#print(X2)
 
 # LogP(data|model)
 #want to maximize the log probability
@@ -61,13 +61,13 @@ print(sum(model.log_probability(X2)))
 ############ Example inference: Predict based on observed nodes
 # 0 - clear; 1 - ban start; 2 - ban continuation
 calbayog = None     # X_0
-cambatutay = 2      # X_1
-irong = 2           # X_2
+cambatutay = 1      # X_1
+irong = None           # X_2
 maqueda = None      # X_3
 villareal = None    # X_4
 daram = None        # X_5
 biliran = None      # X_6
-carigara = 2        # X_7
+carigara = None        # X_7
 coastalleyte = None # X_8
 calubian = None     # X_9
 sanpedro = None     # X_10
